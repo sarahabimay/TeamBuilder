@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sarahabimay/TeamBuilder.svg?branch=master)](https://travis-ci.org/sarahabimay/TeamBuilder)
+
 # TeamBuilder
 
 **TODO: Add description**
