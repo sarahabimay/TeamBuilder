@@ -2,7 +2,7 @@ defmodule TeamBuilder do
   alias TeamBuilder.Members
   alias TeamBuilder.ConsoleWriter
   alias TeamBuilder.ConsoleReader
-  alias TeamBuilder.TeamGenerator
+  alias TeamBuilder.Team
 
   def main(_) do
     ConsoleWriter.welcome_message()
@@ -30,7 +30,7 @@ defmodule TeamBuilder do
   end
 
   defp build_teams(team_type, all_members) do
-    TeamGenerator.empty_teams(team_type)
-    |> TeamGenerator.allocate_members(all_members)
+    Team.empty_teams(team_type)
+    |> Team.allocate_members(all_members)
   end
 end

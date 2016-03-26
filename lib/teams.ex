@@ -1,4 +1,4 @@
-defmodule TeamBuilder.TeamGenerator do
+defmodule TeamBuilder.Team do
   def empty_teams(%{team_type: :fixed, options: fixed_count}) do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
