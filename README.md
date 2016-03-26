@@ -2,9 +2,13 @@
 
 # TeamBuilder
 
-**TODO: Add description**
+Team Builder is in development, but soon you will be able to randomly organize your event invitees into teams.
 
 ## Installation
+1) First you must have Elixir installed
+2) git clone the repo
+3) from the repo directory, run the command ```mix escript.build```
+4) then from the directory run ```./team_builder
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
