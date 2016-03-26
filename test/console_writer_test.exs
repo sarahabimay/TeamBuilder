@@ -14,11 +14,22 @@ defmodule ConsoleWriterTest do
     assert result == "Thank you for using TeamBuilder.\n"
   end
 
+  test "empty team tables displayed" do
+    teams = [
+              %{ :team => 1, :names => [] },
+              %{ :team => 2, :names => [] }
+            ]
+
+    result = capture_io(fn -> ConsoleWriter.display_teams(teams) end)
+    assert result == "[ Team 1 ]\n\n" <>
+                     "[ Team 2 ]\n\n"
+  end
+
   test "team tables displayed" do
     teams = [
               %{ :team => 1, :names => ["Sarah", "Mael", "Jarkyn"] },
               %{ :team => 2, :names => ["Georgina", "Priya", "Rabea"] }
-             ]
+            ]
 
     result = capture_io(fn -> ConsoleWriter.display_teams(teams) end)
     assert result == "[ Team 1 ]\n" <>
