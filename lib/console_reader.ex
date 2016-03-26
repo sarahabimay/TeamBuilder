@@ -5,6 +5,7 @@ defmodule TeamBuilder.ConsoleReader do
     Messages.add_members()
     |> append_space
     |> IO.gets
+    |> String.strip
   end
 
   defp append_space(message), do: message <> " "

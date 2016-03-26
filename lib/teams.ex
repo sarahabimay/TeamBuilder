@@ -1,5 +1,9 @@
-defmodule TeamBuilder.TeamGenerator do
-  def allocate_teams(teams, all_members) do
+defmodule TeamBuilder.Team do
+  def empty_teams(%{team_type: :fixed, options: fixed_count}) do
+    Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
+  end
+
+  def allocate_members(teams, all_members) do
     all_members
     |> assign_team_numbers(teams)
     |> add_members(teams)
@@ -16,8 +20,18 @@ defmodule TeamBuilder.TeamGenerator do
   end
 
   defp get_team(index, teams) do
-    max_team_count = Enum.count(teams)
-    get_team_number(one_indexed(index), max_team_count)
+    teams
+    |> Enum.count
+    |> get_team_number(one_indexed(index))
+  end
+
+  defp get_team_number(max_team_number, member_number) when member_number <= max_team_number do
+    member_number
+  end
+
+  defp get_team_number(max_team_number, member_number) do
+    remainder = rem(member_number, max_team_number)
+    if remainder == 0, do: max_team_number, else: remainder
   end
 
   defp add_members([], teams), do: teams
@@ -41,14 +55,7 @@ defmodule TeamBuilder.TeamGenerator do
     Map.update!(team, :names, fn(members) -> members ++ [new_member] end)
   end
 
-  defp get_team_number(member_number, max_team_number) when member_number <= max_team_number do
-    member_number
-  end
-
-  defp get_team_number(member_number, max_team_number) do
-    remainder = rem(member_number, max_team_number)
-    if remainder == 0, do: max_team_number, else: remainder
-  end
+  defp team_skeleton(team_number), do: %{:team => team_number, :names => []}
 
   defp one_indexed(zero_index), do: zero_index + 1
 end
