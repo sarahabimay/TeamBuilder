@@ -9,6 +9,6 @@ defmodule ConsoleReaderTest do
     result = capture_io([input: member], fn ->
       IO.write ConsoleReader.add_members()
     end)
-    assert result == "Add Team Members: Sarah"
+    assert result == "Add Team Members ([q] to quit): Sarah"
   end
 end
