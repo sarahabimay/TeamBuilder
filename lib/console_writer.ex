@@ -7,13 +7,22 @@ defmodule TeamBuilder.ConsoleWriter do
 
   def display_teams(teams) do
     teams
-    |> Enum.map(fn(team) -> "[ Team #{team[:team]} ]\n" <> team_members(team[:names]) end)
+    |> Enum.map(fn(team) -> team_name(team) <> team_members(team) end)
     |> Enum.join("")
     |> IO.write
   end
 
-  defp team_members(team_members) do
-    team_members
+  def clear_screen() do
+    IO.ANSI.clear |> IO.write
+    IO.ANSI.home |> IO.write
+  end
+
+  defp team_name(team) do
+    "[ Team #{team[:team]} ]\n"
+  end
+
+  defp team_members(team) do
+    team[:names]
     |> Enum.with_index
     |> Enum.map(fn({member, index})-> "[#{one_indexed(index)}] #{member}\n" end)
     |> Enum.join("")

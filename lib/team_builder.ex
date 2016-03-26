@@ -5,6 +5,7 @@ defmodule TeamBuilder do
   alias TeamBuilder.Team
 
   def main(_) do
+    ConsoleWriter.clear_screen()
     ConsoleWriter.welcome_message()
     start_application(ConsoleReader, ConsoleWriter)
   end
