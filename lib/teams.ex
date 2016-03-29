@@ -3,13 +3,19 @@ defmodule TeamBuilder.Team do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
 
-  def allocate_members(teams, all_members) do
-    all_members
-    |> assign_team_numbers(teams)
+  def allocate_members(team_type, all_members) do
+    team_type
+    |> empty_teams
+    |> _allocate_members(all_members)
+  end
+
+  defp _allocate_members(teams, all_members) do
+    teams
+    |> assign_team_numbers(all_members)
     |> add_members(teams)
   end
 
-  defp assign_team_numbers(members, teams) do
+  defp assign_team_numbers(teams, members) do
     members
     |> Enum.with_index
     |> Enum.map(fn({member, index}) -> map_member_to_team(member, index, teams) end)

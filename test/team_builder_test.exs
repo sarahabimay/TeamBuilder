@@ -5,7 +5,6 @@ defmodule TeamBuilderTest do
   alias TeamBuilder.ConsoleWriter
   doctest TeamBuilder
 
-
   @team_type %{:team_type => :fixed, :options => 4}
 
   defmodule FakeReader do
