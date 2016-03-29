@@ -24,14 +24,10 @@ defmodule TeamBuilder do
   defp process_members(:quit, _, _, _, display_writer), do: display_writer.goodbye_message()
 
   defp process_members(new_members, teams, team_type, display_reader, display_writer) do
+    ConsoleWriter.clear_screen()
     members = Members.combine_members(teams, new_members)
-    new_teams = build_teams(team_type, members)
+    new_teams = Team.allocate_members(team_type, members)
     display_writer.display_teams(new_teams)
     request_members(team_type, new_teams, display_reader, display_writer)
-  end
-
-  defp build_teams(team_type, all_members) do
-    Team.empty_teams(team_type)
-    |> Team.allocate_members(all_members)
   end
 end
