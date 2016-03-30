@@ -1,12 +1,10 @@
 defmodule TeamBuilder.ConsoleReader do
   alias TeamBuilder.Messages
-  alias TeamBuilder.Commands
 
   def next_command() do
     next_command_message()
     |> IO.gets
     |> String.strip
-    |> Commands.translate_command
   end
 
   defp next_command_message() do
