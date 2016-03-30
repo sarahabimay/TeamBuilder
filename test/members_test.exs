@@ -4,12 +4,12 @@ defmodule MembersTest do
   alias TeamBuilder.Members
 
   defmodule FakeDisplay do
-    def add_members(), do: "Sarah"
+    def next_command(), do: "Sarah"
   end
 
   test "obtain first single new member" do
     expected = ["Sarah"]
-    assert Members.next_instruction(FakeDisplay) == expected
+    assert Members.next_member(FakeDisplay) == expected
   end
 
   test "add new member to existing members" do

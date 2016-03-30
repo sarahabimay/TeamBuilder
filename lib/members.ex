@@ -1,14 +1,16 @@
 defmodule TeamBuilder.Members do
-  def combine_members(teams, new_members) do
-    extract_all_members(teams) ++ new_members
-  end
-
-  def next_instruction(display_reader) do
-    display_reader.add_members()
+  def next_member(display_reader) do
+    display_reader.next_command()
     |> parse_input
   end
 
-  defp parse_input("q"), do: :quit
+  def add_to_members(members, new_member) do
+    members ++ [new_member]
+  end
+
+  def combine_members(teams, new_members) do
+    extract_all_members(teams) ++ new_members
+  end
 
   defp parse_input(input) do
     [input]
