@@ -4,32 +4,31 @@ defmodule TeamBuilder.Teams do
   end
 
   def allocate_members(team_type, all_members, team_allocator) do
-    team_type
-    |> empty_teams
-    |> _allocate_members(team_type, all_members, team_allocator)
+    assign_team_numbers(all_members, team_type, team_allocator)
+    |> create_teams(team_type)
   end
 
-  defp _allocate_members(teams, team_type, all_members, team_allocator) do
+  defp assign_team_numbers(all_members, team_type, team_allocator) do
     all_members
     |> team_allocator.(team_type)
-    |> add_members(teams)
   end
 
-  defp add_members([], teams), do: teams
-
-  defp add_members([member | rest], teams) do
-    modified_teams = add_member(member, teams)
-    add_members(rest, modified_teams)
+  defp create_teams(members, team_type) do
+    team_type
+    |> empty_teams
+    |> add_team_members(members)
   end
 
-  defp add_member(member, teams) do
-    member_name = member[:member]
-    team_number = member[:team]
-    update_team(teams, team_number, member_name)
+  defp add_team_members(teams, []), do: teams
+
+  defp add_team_members(teams, [new_member | rest]) do
+    teams
+    |> update_team(new_member)
+    |> add_team_members(rest)
   end
 
-  defp update_team(teams, team_number, new_member) do
-    List.update_at(teams, team_number - 1, fn(team) -> update_member_list(team, new_member) end)
+  defp update_team(teams, %{member: new_member, team: team_number}) do
+    List.update_at(teams, zero_indexed(team_number), fn(team) -> update_member_list(team, new_member) end)
   end
 
   defp update_member_list(team, new_member) do
@@ -37,4 +36,6 @@ defmodule TeamBuilder.Teams do
   end
 
   defp team_skeleton(team_number), do: %{:team => team_number, :names => []}
+
+  defp zero_indexed(number), do: number - 1
 end
