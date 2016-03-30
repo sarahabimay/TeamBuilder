@@ -20,8 +20,12 @@ defmodule MessagesTest do
     assert Messages.build_teams() == "[b] Build Teams"
   end
 
+  test "members added header message" do
+    assert Messages.members_header() == "[ Members Added ]"
+  end
+
   test "team table header message" do
-    assert Messages.team_table_header(1) == "Team 1:"
+    assert Messages.team_table_header(1) == "[ Team 1 ]"
   end
 
   test "goodbye message" do
