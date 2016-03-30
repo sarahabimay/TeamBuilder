@@ -4,14 +4,14 @@ defmodule CommandsTest do
   alias TeamBuilder.Commands
 
   test "'q' value is interpreted as 'quit'" do
-    assert Commands.translate_command("q") == :quit
+    assert Commands.command_type("q") == :quit
   end
 
   test "'b' value is interpreted as 'build teams'" do
-    assert Commands.translate_command("b") == :build_teams
+    assert Commands.command_type("b") == :build_teams
   end
 
   test "any other value is interpreted as a new member command" do
-    assert Commands.translate_command("Bob") == "Bob"
+    assert Commands.command_type("Bob") == {:add_member, "Bob"}
   end
 end
