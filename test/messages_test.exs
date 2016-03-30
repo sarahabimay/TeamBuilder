@@ -9,7 +9,15 @@ defmodule MessagesTest do
   end
 
   test "add team member message" do
-    assert Messages.add_members() == "Add Team Members ([q] to quit):"
+    assert Messages.add_members() == "Add Team Members"
+  end
+
+  test "quit message" do
+    assert Messages.quit() == "[q] Quit"
+  end
+
+  test "build message" do
+    assert Messages.build_teams() == "[b] Build Teams"
   end
 
   test "team table header message" do

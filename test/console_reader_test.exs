@@ -7,8 +7,8 @@ defmodule ConsoleReaderTest do
   test "prompt for team member" do
     member = "Sarah"
     result = capture_io([input: member], fn ->
-      IO.write ConsoleReader.add_members()
+      IO.write ConsoleReader.next_command()
     end)
-    assert result == "Add Team Members ([q] to quit): Sarah"
+    assert result == "Add Team Members ([q] Quit - [b] Build Teams): Sarah"
   end
 end

@@ -8,8 +8,8 @@ defmodule TeamBuilderTest do
   @team_type %{:team_type => :fixed, :options => 4}
 
   defmodule FakeReader do
-   def add_members() do
-     "q"
+   def next_command() do
+     :quit
    end
   end
 
@@ -24,10 +24,24 @@ defmodule TeamBuilderTest do
   end
 
   test "typing q, closes the application" do
-    assert TeamBuilder.request_members(@team_type, [], FakeReader, FakeWriter) == "GoodBye"
+    assert TeamBuilder.prompt_for_command([], FakeReader, FakeWriter) == "GoodBye"
+  end
+
+  test "typing b, builds the 4 empty teams" do
+    input = "b\nq\n"
+    expected_result = "[ Team 1 ]\n\n" <>
+                      "[ Team 2 ]\n\n" <>
+                      "[ Team 3 ]\n\n" <>
+                      "[ Team 4 ]\n\n" <>
+                      "Thank you for using TeamBuilder.\n"
+    result = capture_io([input: input, capture_prompt: false], fn() ->
+      IO.write TeamBuilder.prompt_for_command([], ConsoleReader, ConsoleWriter)
+    end)
+    assert String.contains?(result, expected_result)
   end
 
   test "consecutive new members redistributed across teams" do
+    input = "Sarah\nJames\nb\nq\n"
     expected_result = "[ Team 1 ]\n" <>
                        "[1] Sarah\n\n" <>
                        "[ Team 2 ]\n" <>
@@ -35,10 +49,18 @@ defmodule TeamBuilderTest do
                        "[ Team 3 ]\n\n" <>
                        "[ Team 4 ]\n\n" <>
                        "Thank you for using TeamBuilder.\n"
-    input = "Sarah\nJames\nq\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
-      IO.write TeamBuilder.request_members(@team_type, [], ConsoleReader, ConsoleWriter)
+      IO.write TeamBuilder.prompt_for_command([], ConsoleReader, ConsoleWriter)
     end)
     assert String.contains?(result, expected_result)
+  end
+
+  def get_teams(4) do
+    [
+      %{:team => 1, :names => []},
+      %{:team => 2, :names => []},
+      %{:team => 3, :names => []},
+      %{:team => 4, :names => []},
+    ]
   end
 end
