@@ -30,16 +30,27 @@ defmodule ConsoleWriterTest do
               %{ :team => 1, :names => ["Sarah", "Mael", "Jarkyn"] },
               %{ :team => 2, :names => ["Georgina", "Priya", "Rabea"] }
             ]
+    expected = "[ Team 1 ]\n" <>
+               "[1] Sarah\n" <>
+               "[2] Mael\n" <>
+               "[3] Jarkyn\n\n" <>
+
+               "[ Team 2 ]\n" <>
+               "[1] Georgina\n" <>
+               "[2] Priya\n" <>
+               "[3] Rabea\n\n"
 
     result = capture_io(fn -> ConsoleWriter.display_teams(teams) end)
-    assert result == "[ Team 1 ]\n" <>
-                     "[1] Sarah\n" <>
-                     "[2] Mael\n" <>
-                     "[3] Jarkyn\n\n" <>
+    assert result == expected
+  end
 
-                     "[ Team 2 ]\n" <>
-                     "[1] Georgina\n" <>
-                     "[2] Priya\n" <>
-                     "[3] Rabea\n\n"
+  test "members all displayed" do
+    all_members = ["Sarah", "Abigail", "May"]
+    expected = "[ Members Added ]\n" <>
+               "[1] Sarah\n" <>
+               "[2] Abigail\n" <>
+               "[3] May\n\n"
+    result = capture_io(fn -> ConsoleWriter.display_members(all_members) end)
+    assert result == expected
   end
 end

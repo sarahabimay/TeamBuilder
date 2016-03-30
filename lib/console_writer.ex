@@ -5,9 +5,13 @@ defmodule TeamBuilder.ConsoleWriter do
 
   def goodbye_message(), do: IO.puts(Messages.goodbye())
 
+  def display_members(members) do
+    IO.write members_header() <> team_members(members)
+  end
+
   def display_teams(teams) do
     teams
-    |> Enum.map(fn(team) -> team_name(team) <> team_members(team) end)
+    |> Enum.map(fn(team) -> team_name(team) <> team_members(team[:names]) end)
     |> Enum.join("")
     |> IO.write
   end
@@ -17,12 +21,18 @@ defmodule TeamBuilder.ConsoleWriter do
     IO.ANSI.home |> IO.write
   end
 
-  defp team_name(team) do
-    "[ Team #{team[:team]} ]\n"
+  defp members_header() do
+    Messages.members_header()
+    |> append_new_line
   end
 
-  defp team_members(team) do
-    team[:names]
+  defp team_name(team) do
+    Messages.team_table_header(team[:team])
+    |> append_new_line
+  end
+
+  defp team_members(members) do
+    members
     |> Enum.with_index
     |> Enum.map(fn({member, index})-> "[#{one_indexed(index)}] #{member}\n" end)
     |> Enum.join("")

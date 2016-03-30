@@ -7,7 +7,9 @@ defmodule TeamBuilder.Messages do
 
   def build_teams(), do: "[b] Build Teams"
 
-  def team_table_header(team_number), do: "Team #{team_number}:"
+  def members_header(), do: "[ Members Added ]"
+
+  def team_table_header(team_number), do: "[ Team #{team_number} ]"
 
   def goodbye(), do: "Thank you for using TeamBuilder."
 end
