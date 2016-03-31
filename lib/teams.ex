@@ -1,16 +1,18 @@
 defmodule TeamBuilder.Teams do
+  alias TeamBuilder.RandomTeamAllocator
+
   def empty_teams(%{team_type: :fixed, options: fixed_count}) do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
 
-  def allocate_members(team_type, all_members, team_allocator) do
-    assign_team_numbers(all_members, team_type, team_allocator)
+  def allocate_members(team_type, all_members, random_seed_state) do
+    assign_team_numbers(all_members, team_type, random_seed_state)
     |> create_teams(team_type)
   end
 
-  defp assign_team_numbers(all_members, team_type, team_allocator) do
+  defp assign_team_numbers(all_members, team_type, random_seed_state) do
     all_members
-    |> team_allocator.(team_type)
+    |> RandomTeamAllocator.assign_teams(team_type, random_seed_state)
   end
 
   defp create_teams(members, team_type) do

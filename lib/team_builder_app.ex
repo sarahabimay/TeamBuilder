@@ -9,30 +9,30 @@ defmodule TeamBuilder.TeamBuilderApp do
     prompt_for_command(members, display_reader, display_writer, team_selector)
   end
 
-  def prompt_for_command(members, display_reader, display_writer, team_selector) do
+  def prompt_for_command(members, display_reader, display_writer, random_seed_state) do
     display_reader
     |> next_command
-    |> process_command(members, display_reader, display_writer, team_selector)
+    |> process_command(members, display_reader, display_writer, random_seed_state)
   end
 
   defp process_command(:quit, _, _, display_writer, _), do: display_writer.goodbye_message()
 
-  defp process_command(:build_teams, members, display_reader, display_writer, team_selector) do
+  defp process_command(:build_teams, members, display_reader, display_writer, random_seed_state) do
     get_team_type()
-    |> build_teams(members, display_reader, display_writer, team_selector)
-    prompt_for_command(members, display_reader, display_writer, team_selector)
+    |> build_teams(members, display_reader, display_writer, random_seed_state)
+    prompt_for_command(members, display_reader, display_writer, random_seed_state)
   end
 
-  defp process_command({:add_member, new_member}, members, display_reader, display_writer, team_selector) do
+  defp process_command({:add_member, new_member}, members, display_reader, display_writer, random_seed_state) do
     all_members = Members.add_to_members(members, new_member)
     display_writer.display_members(all_members)
-    prompt_for_command(all_members, display_reader, display_writer, team_selector)
+    prompt_for_command(all_members, display_reader, display_writer, random_seed_state)
   end
 
-  defp build_teams(team_type, members, _, display_writer, team_selector) do
+  defp build_teams(team_type, members, _, display_writer, random_seed_state) do
     display_writer.clear_screen()
     team_type
-    |> Teams.allocate_members(members, team_selector)
+    |> Teams.allocate_members(members, random_seed_state)
     |> display_writer.display_teams
   end
 
