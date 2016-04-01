@@ -8,12 +8,13 @@ defmodule RandomTeamAllocatorTest do
     team_type = %{:team_type => :fixed, :options => 4 }
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
     [a1, a2, a3, a4] = Enum.take_random(members, 4)
-    expected_result = [
+    expected_teams = [
       %{ :member => a1, :team => 1 },
       %{ :member => a2, :team => 2 },
       %{ :member => a3, :team => 3 },
       %{ :member => a4, :team => 4 }
     ]
-    assert RandomTeamAllocator.assign_teams(members, team_type, seed_state) == expected_result
+    {teams, _ } = RandomTeamAllocator.assign_teams(members, team_type, seed_state)
+    assert teams == expected_teams
   end
 end

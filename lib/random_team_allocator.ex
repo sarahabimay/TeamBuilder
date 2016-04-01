@@ -1,19 +1,24 @@
 defmodule TeamBuilder.RandomTeamAllocator do
-  def assign_teams([], _, _), do: []
-
-  def assign_teams(members, %{team_type: :fixed, options: fixed_count} = team_type, random_seed_state) do
-    {selection, remainder} = member_selection(members, fixed_count, random_seed_state)
-    with_team_number(selection) ++ assign_teams(remainder, team_type, random_seed_state)
+  def assign_teams(members, %{team_type: :fixed, options: fixed_count} = team_type, seed_state) do
+    teams = _assign_teams(members, team_type, seed_state)
+    {teams, :rand.export_seed()}
   end
 
-  defp member_selection(members, team_count, random_seed_state) do
+  defp _assign_teams([], _, seed_state), do: []
+
+  defp _assign_teams(members, %{team_type: :fixed, options: fixed_count} = team_type, seed_state) do
+    {selection, remainder} = member_selection(members, fixed_count, seed_state)
+    with_team_number(selection) ++ _assign_teams(remainder, team_type, seed_state)
+  end
+
+  defp member_selection(members, team_count, seed) do
     members
-    |> take_random(team_count, random_seed_state)
+    |> take_random_pure(team_count, seed)
     |> partition(members)
   end
 
-  defp take_random(members, team_count, random_seed_state) do
-    :rand.seed(random_seed_state)
+  defp take_random_pure(members, team_count, seed) do
+    :rand.seed(seed)
     Enum.take_random(members, team_count)
   end
 
@@ -24,7 +29,7 @@ defmodule TeamBuilder.RandomTeamAllocator do
 
   defp remaining_members(selected_members, all_members) do
     {_, remaining} = Enum.partition(all_members, fn(x) -> Enum.any?(selected_members, fn(s) -> s == x end) end)
-     remaining
+    remaining
   end
 
   defp with_team_number(members) do

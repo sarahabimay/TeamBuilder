@@ -5,17 +5,18 @@ defmodule TeamBuilder.Teams do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
 
-  def allocate_members(team_type, all_members, random_seed_state) do
-    assign_team_numbers(all_members, team_type, random_seed_state)
-    |> create_teams(team_type)
+  def allocate_members(team_type, all_members, random_seed) do
+    {members, new_seed} = assign_team_numbers(all_members, team_type, random_seed)
+    teams = create_teams(team_type, members)
+    {teams, new_seed}
   end
 
-  defp assign_team_numbers(all_members, team_type, random_seed_state) do
+  defp assign_team_numbers(all_members, team_type, random_seed) do
     all_members
-    |> RandomTeamAllocator.assign_teams(team_type, random_seed_state)
+    |> RandomTeamAllocator.assign_teams(team_type, random_seed)
   end
 
-  defp create_teams(members, team_type) do
+  defp create_teams(team_type, members) do
     team_type
     |> empty_teams
     |> add_team_members(members)
