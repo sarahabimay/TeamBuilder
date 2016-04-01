@@ -38,7 +38,7 @@ defmodule TeamBuilder.RandomTeamAllocator do
   end
 
   defp extract_last_seed(teams_and_seed) do
-    Enum.find_value(results, fn(x) -> x[:new_seed] end)
+    Enum.find_value(teams_and_seed, fn(x) -> x[:new_seed] end)
   end
 
   defp extract(mixed_list, search_atom) do
