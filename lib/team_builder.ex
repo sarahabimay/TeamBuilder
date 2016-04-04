@@ -1,11 +1,10 @@
 defmodule TeamBuilder do
   alias TeamBuilder.ConsoleWriter
   alias TeamBuilder.ConsoleReader
-  alias TeamBuilder.RandomTeamAllocator
-  alias TeamBuilder.RandomSelection
   alias TeamBuilder.TeamBuilderApp
 
   def main(_) do
-    TeamBuilderApp.start_application([], ConsoleReader, ConsoleWriter, RandomTeamAllocator.team_allocator(RandomSelection))
+    seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
+    TeamBuilderApp.start_application([], ConsoleReader, ConsoleWriter, seed_state)
   end
 end
