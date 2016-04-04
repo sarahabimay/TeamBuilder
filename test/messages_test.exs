@@ -28,6 +28,14 @@ defmodule MessagesTest do
     assert Messages.team_table_header(1) == "[ Team 1 ]"
   end
 
+  test "team allocation type option" do
+    assert Messages.team_type_options() == "[ Team Type Options ]"
+  end
+
+  test "fixed number of teams option" do
+    assert Messages.fixed_teams_option() == "Fixed Number Of Teams"
+  end
+
   test "goodbye message" do
     assert Messages.goodbye() == "Thank you for using TeamBuilder."
   end
