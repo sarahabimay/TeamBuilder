@@ -36,6 +36,10 @@ defmodule MessagesTest do
     assert Messages.fixed_teams_option() == "Fixed Number Of Teams"
   end
 
+  test "maximum team size option" do
+    assert Messages.max_size_teams_option() == "Max Team Size"
+  end
+
   test "goodbye message" do
     assert Messages.goodbye() == "Thank you for using TeamBuilder."
   end

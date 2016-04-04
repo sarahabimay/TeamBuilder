@@ -15,5 +15,7 @@ defmodule TeamBuilder.Messages do
 
   def fixed_teams_option(), do: "Fixed Number Of Teams"
 
+  def max_size_teams_option(), do: "Max Team Size"
+
   def goodbye(), do: "Thank you for using TeamBuilder."
 end
