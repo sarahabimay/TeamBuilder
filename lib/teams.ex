@@ -5,21 +5,44 @@ defmodule TeamBuilder.Teams do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
 
-  def allocate_members(team_type, all_members, random_seed) do
-    {members, new_seed} = assign_team_numbers(all_members, team_type, random_seed)
-    teams = create_teams(team_type, members)
-    {teams, new_seed}
+  def empty_teams(%{team_type: :max_size, options: _}) do
+    Enum.map(1..1, fn(number) -> team_skeleton(number) end)
   end
 
-  defp assign_team_numbers(all_members, team_type, random_seed) do
+  def assign_team_numbers(all_members, team_type, random_seed) do
     all_members
     |> RandomTeamAllocator.assign_teams(team_type, random_seed)
   end
 
-  defp create_teams(team_type, members) do
+  def create_teams(%{team_type: :max_size, options: _}, members) do
+    add_team_members([], :max_size, members)
+  end
+
+  def create_teams(team_type, members) do
     team_type
     |> empty_teams
     |> add_team_members(members)
+  end
+
+  def add_team_members(teams, :max_size, []), do: teams
+
+  def add_team_members(teams, :max_size, [new_member | rest]) do
+    ammend_teams(teams, new_member)
+    |> add_team_members(:max_size, rest)
+  end
+
+  def ammend_teams(teams, %{member: _, team: team_number} = member) do
+    new_teams =
+    if Enum.at(teams, zero_indexed(team_number), :none) == :none do
+      add_new_team(teams, team_number)
+    else
+      teams
+    end
+    update_team(new_teams, member)
+  end
+
+  defp add_new_team(teams, team_number) do
+    List.insert_at(teams, zero_indexed(team_number), team_skeleton(team_number))
   end
 
   defp add_team_members(teams, []), do: teams
