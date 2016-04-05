@@ -11,5 +11,11 @@ defmodule TeamBuilder.Messages do
 
   def team_table_header(team_number), do: "[ Team #{team_number} ]"
 
+  def team_type_options(), do: "[ Team Type Options ]"
+
+  def fixed_teams_option(), do: "Fixed Number Of Teams"
+
+  def max_size_teams_option(), do: "Max Team Size"
+
   def goodbye(), do: "Thank you for using TeamBuilder."
 end

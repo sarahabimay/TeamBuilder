@@ -7,9 +7,18 @@ defmodule MembersTest do
     def next_command(), do: "Sarah"
   end
 
-  test "obtain first single new member" do
-    expected = ["Sarah"]
-    assert Members.next_member(FakeDisplay) == expected
+  test "'empty' new member not added to existing members" do
+    new_member = ""
+    members = ["April", "May"]
+    expected = ["April", "May"]
+    assert Members.add_to_members(members, new_member) == expected
+  end
+
+  test "new member added to existing members" do
+    new_member = "Sarah"
+    members = ["April", "May"]
+    expected = ["April", "May", "Sarah"]
+    assert Members.add_to_members(members, new_member) == expected
   end
 
   test "add new member to existing members" do
