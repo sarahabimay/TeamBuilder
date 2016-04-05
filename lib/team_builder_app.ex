@@ -1,6 +1,5 @@
 defmodule TeamBuilder.TeamBuilderApp do
   alias TeamBuilder.Members
-  alias TeamBuilder.Teams
   alias TeamBuilder.TeamTypeOptions
   alias TeamBuilder.Commands
 
@@ -34,7 +33,7 @@ defmodule TeamBuilder.TeamBuilderApp do
 
   defp build_teams(members, display_reader, seed_state) do
     get_team_type(display_reader)
-    |> Teams.allocate_members(members, seed_state)
+    |> Members.allocate_teams(members, seed_state)
   end
 
   defp get_team_type(display_reader) do

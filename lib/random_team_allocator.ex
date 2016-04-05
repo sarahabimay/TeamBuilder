@@ -1,11 +1,23 @@
 defmodule TeamBuilder.RandomTeamAllocator do
+  def assign_teams(members, %{team_type: :max_size, options: _ } = team_type, seed_state) do
+    team_count = 0
+    _assign_teams(members, team_type, team_count, seed_state)
+    |> separate_teams_and_seed
+  end
+
   def assign_teams(members, %{team_type: :fixed, options: _ } = team_type, seed_state) do
     _assign_teams(members, team_type, seed_state)
     |> separate_teams_and_seed
   end
 
-  defp _assign_teams([], _, seed_state), do: [%{:new_seed => seed_state}]
+  defp _assign_teams([], _, _, seed_state), do: [%{:new_seed => seed_state}]
+  defp _assign_teams(members, %{team_type: :max_size, options: max_team_size} = team_type, team_count, seed_state) do
+    {selection, new_seed} = random_member_selection(members, max_team_size, seed_state)
+    remainder = remaining_members(selection, members)
+    with_team_number(selection, team_count) ++ _assign_teams(remainder, team_type, team_count + 1, new_seed)
+  end
 
+  defp _assign_teams([], _, seed_state), do: [%{:new_seed => seed_state}]
   defp _assign_teams(members, %{team_type: :fixed, options: fixed_count} = team_type, seed_state) do
     {selection, new_seed} = random_member_selection(members, fixed_count, seed_state)
     remainder = remaining_members(selection, members)
@@ -21,6 +33,11 @@ defmodule TeamBuilder.RandomTeamAllocator do
   defp remaining_members(selected_members, all_members) do
     {_, remaining} = Enum.partition(all_members, fn(x) -> Enum.any?(selected_members, fn(s) -> s == x end) end)
     remaining
+  end
+
+  defp with_team_number(members, team_number) do
+    members
+    |> Enum.map(fn(member) -> map_member_to_team(member, team_number) end)
   end
 
   defp with_team_number(members) do

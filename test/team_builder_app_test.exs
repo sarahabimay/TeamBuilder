@@ -32,7 +32,7 @@ defmodule TeamBuilderAppTest do
     empty_line = ""
     quit = "q"
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    expected_result =  "[ Members Added ]\n\n" <> 
+    expected_result =  "[ Members Added ]\n\n" <>
                       "Thank you for using TeamBuilder.\n"
     result = capture_io([input: "#{empty_line}\n#{quit}\n", capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
@@ -45,7 +45,7 @@ defmodule TeamBuilderAppTest do
     assert TeamBuilderApp.prompt_for_command([], FakeReader, FakeWriter, seed_state) == "GoodBye"
   end
 
-  test "typing b, builds the 4 empty teams" do
+  test "fixed teams: typing b, builds the 4 empty teams" do
     build_command="b"
     team_type="1 - 4"
     quit = "q"
@@ -81,7 +81,33 @@ defmodule TeamBuilderAppTest do
     assert String.contains?(result, expected_result)
   end
 
+  test "max size teams chosen as the teams type" do
+    members = generate_members(3)
+    [a1, a2, a3] = members
+    build_command = "b"
+    team_type = "2 - 2"
+    input = "#{a1}\n#{a2}\n#{a3}\n#{build_command}\n#{team_type}\nq\n"
+    seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
+    [first, second] = Enum.take_random(members, 2)
+    third = remaining_members([first, second], members)
+    expected_result = "[ Team 1 ]\n" <>
+                       "[1] #{first}\n" <>
+                       "[2] #{second}\n\n" <>
+                       "[ Team 2 ]\n" <>
+                       "[1] #{third}\n\n" <>
+                       "Thank you for using TeamBuilder.\n"
+    result = capture_io([input: input, capture_prompt: false], fn() ->
+      IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
+    end)
+    assert String.contains?(result, expected_result)
+  end
+
   def generate_members(number) do
     Enum.map(1..number, fn(num) -> "name#{num}" end)
+  end
+
+  def remaining_members(selected_members, all_members) do
+    {_, remaining} = Enum.partition(all_members, fn(x) -> Enum.any?(selected_members, fn(s) -> s == x end) end)
+    remaining
   end
 end
