@@ -1,9 +1,23 @@
 defmodule TeamBuilder.TeamTypeOptions do
   alias TeamBuilder.Messages
+  alias TeamBuilder.FixedTeamAllocator
+  alias TeamBuilder.MaxSizeTeamAllocator
 
   @team_types [
-    %{ :menu_option => 1, :team_type => :fixed, :description => Messages.fixed_teams_option(), :type_options => :max_number_of_teams },
-    %{ :menu_option => 2, :team_type => :max_size, :description => Messages.max_size_teams_option(), :type_options => :max_team_size }
+    %{
+      :menu_option => 1,
+      :team_type => :fixed,
+      :team_type_allocator => FixedTeamAllocator,
+      :description => Messages.fixed_teams_option(),
+      :type_options => :max_number_of_teams
+    },
+    %{
+      :menu_option => 2,
+      :team_type => :max_size,
+      :team_type_allocator => MaxSizeTeamAllocator,
+      :description => Messages.max_size_teams_option(),
+      :type_options => :max_team_size
+    }
   ]
 
   def options() do
@@ -12,8 +26,7 @@ defmodule TeamBuilder.TeamTypeOptions do
 
   def valid_option?(choice) do
     choice
-    |> parse_choice
-    |> integer_choice
+    |> choices_as_integer_list
     |> valid_choice?
   end
 
@@ -25,9 +38,14 @@ defmodule TeamBuilder.TeamTypeOptions do
 
   def get_team_type(team_type_choice) do
     team_type_choice
-    |> parse_choice
-    |> integer_choice
+    |> choices_as_integer_list
     |> get_team_type
+  end
+
+  def choices_as_integer_list(choices) do
+    choices
+    |> parse_choice
+    |> convert_to_integer
   end
 
   defp parse_choice(choice) do
@@ -36,9 +54,9 @@ defmodule TeamBuilder.TeamTypeOptions do
     |> Enum.map(fn(detail) -> String.strip(detail) end)
   end
 
-  defp integer_choice(options) do
+  defp convert_to_integer(options) do
     options
-    |> Enum.map(fn(option) -> convert_to_integer(option) end)
+    |> Enum.map(fn(option) -> option_to_integer(option) end)
   end
 
   defp valid_choice?([_]), do: false
@@ -62,7 +80,17 @@ defmodule TeamBuilder.TeamTypeOptions do
 
   defp validate_type_option(), do: fn(_) -> true end
 
-  defp convert_to_integer(option) do
+  defp create_team_type([], _), do: %{:team_type => nil}
+
+  defp create_team_type([chosen_option], type_option) do
+    %{
+      :team_type => chosen_option[:team_type],
+      :team_allocator => chosen_option[:team_type_allocator],
+      :options => type_option
+    }
+  end
+
+  defp option_to_integer(option) do
     option
     |> Integer.parse
     |> extract_integer
@@ -71,10 +99,4 @@ defmodule TeamBuilder.TeamTypeOptions do
   defp extract_integer({int, _}), do: int
 
   defp extract_integer(:error), do: :error
-
-  defp create_team_type([], _), do: %{:team_type => nil}
-
-  defp create_team_type([chosen_option], type_option) do
-    %{:team_type => chosen_option[:team_type], :options => type_option}
-  end
 end
