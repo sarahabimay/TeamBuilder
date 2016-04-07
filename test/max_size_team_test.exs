@@ -1,7 +1,7 @@
-defmodule MaxSizeTeamAllocatorTest do
+defmodule MaxSizeTeamTest do
   use ExUnit.Case
   doctest TeamBuilder
-  alias TeamBuilder.MaxSizeTeamAllocator
+  alias TeamBuilder.MaxSizeTeam
 
   test "max_size_team:4 assign 4 members to one team" do
     members = ["name1", "name2", "name3", "name4"]
@@ -14,7 +14,7 @@ defmodule MaxSizeTeamAllocatorTest do
       %{ :member => a3, :team => 1 },
       %{ :member => a4, :team => 1 }
     ]
-    {teams, _ } = MaxSizeTeamAllocator.assign_teams(members, max_size, seed_state)
+    {teams, _ } = MaxSizeTeam.assign_teams(members, max_size, seed_state)
     assert teams == expected_teams
   end
 
@@ -24,7 +24,7 @@ defmodule MaxSizeTeamAllocatorTest do
     expected_number_in_team1 = 4
     expected_number_in_team2 = 4
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    {teams, _ } = MaxSizeTeamAllocator.assign_teams(members, max_size, seed_state)
+    {teams, _ } = MaxSizeTeam.assign_teams(members, max_size, seed_state)
     members_in_team1 = Enum.count(Enum.filter(teams, fn(team) -> team[:team] == 1 end))
     members_in_team2 = Enum.count(Enum.filter(teams, fn(team) -> team[:team] == 2 end))
     assert [members_in_team1, members_in_team2] == [expected_number_in_team1, expected_number_in_team2]
@@ -36,7 +36,7 @@ defmodule MaxSizeTeamAllocatorTest do
     expected_number_in_team1 = 2
     expected_number_in_team2 = 3
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    {teams, _ } = MaxSizeTeamAllocator.assign_teams(members, max_size, seed_state)
+    {teams, _ } = MaxSizeTeam.assign_teams(members, max_size, seed_state)
     members_in_team1 = Enum.count(Enum.filter(teams, fn(team) -> team[:team] == 1 end))
     members_in_team2 = Enum.count(Enum.filter(teams, fn(team) -> team[:team] == 2 end))
     assert [members_in_team1, members_in_team2] == [expected_number_in_team1, expected_number_in_team2]

@@ -2,11 +2,11 @@ defmodule TeamTest do
   use ExUnit.Case
   doctest TeamBuilder
   alias TeamBuilder.Teams
-  alias TeamBuilder.FixedTeamAllocator
-  alias TeamBuilder.MaxSizeTeamAllocator
+  alias TeamBuilder.FixedTeam
+  alias TeamBuilder.MaxSizeTeam
 
-  @fixed_team_type %{:team_type => :fixed, :team_allocator => FixedTeamAllocator, :options => 4}
-  @max_size_team_type %{:team_type => :max_size, :team_allocator => MaxSizeTeamAllocator, :options => 4}
+  @fixed_team_type %{:team_type => :fixed, :team_allocator => FixedTeam, :options => 4}
+  @max_size_team_type %{:team_type => :max_size, :team_allocator => MaxSizeTeam, :options => 4}
 
   test "fixed_team_count:4 - assign 5 members to 4 teams" do
     members = TestHelper.generate_members(5)
