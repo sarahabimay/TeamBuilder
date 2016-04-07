@@ -28,8 +28,7 @@ defmodule TeamBuilder.TeamAllocator do
   end
 
   defp remaining_members(selected_members, all_members) do
-    {_, remaining} = Enum.partition(all_members, fn(x) -> Enum.any?(selected_members, fn(s) -> s == x end) end)
-    remaining
+    all_members -- selected_members
   end
 
   defp one_indexed(zero_index), do: zero_index + 1
