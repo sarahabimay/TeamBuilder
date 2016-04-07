@@ -1,12 +1,11 @@
 defmodule TeamBuilderAppTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
-  alias TeamBuilder.ConsoleReader
-  alias TeamBuilder.ConsoleWriter
+  alias TeamBuilder.Console
   alias TeamBuilder.TeamBuilderApp
   doctest TeamBuilder
 
-  defmodule FakeReader do
+  defmodule FakeDisplay do
     def next_command() do
       "q"
     end
@@ -14,9 +13,7 @@ defmodule TeamBuilderAppTest do
     def team_type_options() do
       4
     end
-  end
 
-  defmodule FakeWriter do
     def display_teams(teams) do
       teams
     end
@@ -26,6 +23,11 @@ defmodule TeamBuilderAppTest do
     end
   end
 
+  test "typing q, closes the application" do
+    seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
+    assert TeamBuilderApp.prompt_for_command([], FakeDisplay, seed_state) == "GoodBye"
+  end
+
   test "empty string value is not added to members" do
     empty_line = ""
     quit = "q"
@@ -33,14 +35,9 @@ defmodule TeamBuilderAppTest do
     expected_result =  "[ Members Added ]\n\n" <>
                         "Thank you for using TeamBuilder.\n"
     result = capture_io([input: "#{empty_line}\n#{quit}\n", capture_prompt: false], fn() ->
-      IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
+      IO.write TeamBuilderApp.prompt_for_command([], Console, seed_state)
     end)
     assert String.contains?(result, expected_result)
-  end
-
-  test "typing q, closes the application" do
-    seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    assert TeamBuilderApp.prompt_for_command([], FakeReader, FakeWriter, seed_state) == "GoodBye"
   end
 
   test "fixed teams: typing b, builds the 4 empty teams" do
@@ -50,7 +47,7 @@ defmodule TeamBuilderAppTest do
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
     expected_result = "Thank you for using TeamBuilder.\n"
     result = capture_io([input: "#{build}\n#{team_type}\n#{quit}\n", capture_prompt: false], fn() ->
-      IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
+      IO.write TeamBuilderApp.prompt_for_command([], Console, seed_state)
     end)
     assert String.contains?(result, expected_result)
   end
@@ -68,7 +65,7 @@ defmodule TeamBuilderAppTest do
                       "[1] #{second}\n\n" <>
                       "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
-      IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
+      IO.write TeamBuilderApp.prompt_for_command([], Console, seed_state)
     end)
     assert String.contains?(result, expected_result)
   end
@@ -88,7 +85,7 @@ defmodule TeamBuilderAppTest do
                       "[3] #{third}\n\n" <>
                       "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
-      IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
+      IO.write TeamBuilderApp.prompt_for_command([], Console, seed_state)
     end)
     assert String.contains?(result, expected_result)
   end

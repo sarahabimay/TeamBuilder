@@ -10,7 +10,6 @@ defmodule TeamBuilder.ConsoleReader do
   end
 
   def team_type_options() do
-    ConsoleWriter.clear_screen()
     team_options_message()
     |> IO.gets
     |> String.strip
