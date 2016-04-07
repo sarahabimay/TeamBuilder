@@ -24,7 +24,7 @@ defmodule ConsoleTest do
 
   test "welcome message displayed" do
     result = capture_io(fn -> Console.welcome_message() end)
-    assert result == "Welcome to TeamBuilder. Please add your first invitee.\n"
+    assert String.contains?(result, "Welcome to TeamBuilder. Please add your first invitee.\n")
   end
 
   test "goodbye message displayed" do
