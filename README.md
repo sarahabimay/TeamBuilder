@@ -2,25 +2,70 @@
 
 # TeamBuilder
 
-Team Builder is in development, but soon you will be able to randomly organize your event invitees into teams.
+Team Builder is an Elixir app, to randomly organize a list of people into teams.
+
+#### Usage:
+##### To Run:
+```
+./team_builder
+```
+##### To Add Members:
+```
+Welcome to TeamBuilder. Please add your first invitee.
+Add Team Member ([q] Quit - [b] Build Teams):
+```
+##### To Build Teams:
+```
+[ Members Added ]
+[1] Jane
+[2] John
+[3] Dexter
+[3] Morgan
+
+Add Team Members ([q] Quit - [b] Build Teams): b
+```
+##### Select team allocation style:
+- option - option_size e.g. `1 - 4`
+```
+[ Team Type Options ]
+[1] Fixed Number Of Teams [enter: 1 - max_number_of_teams]
+[2] Max Team Size [enter: 2 - max_team_size]
+> 1 - 4
+```
+##### Result!
+```
+[ Team 1 ]
+[1] Jane
+
+[ Team 2 ]
+[1] John
+
+[ Team 3 ]
+[1] Morgan
+
+[ Team 4 ]
+[1] Dexter
+
+Add Team Members ([q] Quit - [b] Build Teams):
+```
 
 ## Installation
 1. First you must have Elixir installed
-2. git clone the repo
-3. from the repo directory, run the command ```mix escript.build```
-4. then from the directory run ```./team_builder```
+  1. Mac OS
+    * Update your homebrew to latest: ```brew update```
+    * Run: ```brew install elixir```
+  2. Add Elixir to your PATH (UNIX)
+    * ```export PATH="$PATH:/path/to/elixir/bin"```
+  3. Further help can be found at [Elixir-Lang](http://elixir-lang.org/install.html)
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add team_builder to your list of dependencies in `mix.exs`:
+2. Clone the repo
+  * ```git clone https://github.com/sarahabimay/TeamBuilder.git```
 
-        def deps do
-          [{:team_builder, "~> 0.0.1"}]
-        end
 
-  2. Ensure team_builder is started before your application:
+3. From the repo directory, run the command:
+  * ```mix escript.build```
 
-        def application do
-          [applications: [:team_builder]]
-        end
 
+4. Then from the directory run:
+  * ```./team_builder```
