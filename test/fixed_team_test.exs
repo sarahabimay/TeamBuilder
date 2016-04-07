@@ -1,7 +1,7 @@
-defmodule FixedTeamAllocatorTest do
+defmodule FixedTeamTest do
   use ExUnit.Case
   doctest TeamBuilder
-  alias TeamBuilder.FixedTeamAllocator
+  alias TeamBuilder.FixedTeam
 
   test "fixed_team_count:4 assign 4 members to 4 teams" do
     members = ["name1", "name2", "name3", "name4"]
@@ -14,7 +14,7 @@ defmodule FixedTeamAllocatorTest do
       %{ :member => a3, :team => 3 },
       %{ :member => a4, :team => 4 }
     ]
-    {teams, _ } = FixedTeamAllocator.assign_teams(members, team_count, seed_state)
+    {teams, _ } = FixedTeam.assign_teams(members, team_count, seed_state)
     assert teams == expected_teams
   end
 end

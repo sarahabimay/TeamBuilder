@@ -1,20 +1,20 @@
 defmodule TeamBuilder.TeamTypeOptions do
   alias TeamBuilder.Messages
-  alias TeamBuilder.FixedTeamAllocator
-  alias TeamBuilder.MaxSizeTeamAllocator
+  alias TeamBuilder.FixedTeam
+  alias TeamBuilder.MaxSizeTeam
 
   @team_types [
     %{
       :menu_option => 1,
       :team_type => :fixed,
-      :team_type_allocator => FixedTeamAllocator,
+      :team_type_allocator => FixedTeam,
       :description => Messages.fixed_teams_option(),
       :type_options => :max_number_of_teams
     },
     %{
       :menu_option => 2,
       :team_type => :max_size,
-      :team_type_allocator => MaxSizeTeamAllocator,
+      :team_type_allocator => MaxSizeTeam,
       :description => Messages.max_size_teams_option(),
       :type_options => :max_team_size
     }

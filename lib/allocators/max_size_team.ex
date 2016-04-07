@@ -1,4 +1,4 @@
-defmodule TeamBuilder.MaxSizeTeamAllocator do
+defmodule TeamBuilder.MaxSizeTeam do
   alias TeamBuilder.TeamAllocator
 
   def assign_teams(members, max_size, seed_state) do
