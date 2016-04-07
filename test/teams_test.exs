@@ -8,19 +8,6 @@ defmodule TeamTest do
   @fixed_team_type %{:team_type => :fixed, :team_allocator => FixedTeamAllocator, :options => 4}
   @max_size_team_type %{:team_type => :max_size, :team_allocator => MaxSizeTeamAllocator, :options => 4}
 
-  test "fixed number of teams created" do
-    fixed_number_of_teams = 4
-    expected_result = TestHelper.get_teams(fixed_number_of_teams)
-    assert Teams.empty_teams(@fixed_team_type) == expected_result
-  end
-
-  test "max team size empty team created" do
-    expected_result = [
-      %{:team => 1, :names => []}
-    ]
-    assert Teams.empty_teams(@max_size_team_type) == expected_result
-  end
-
   test "fixed_team_count:4 - assign 5 members to 4 teams" do
     members = TestHelper.generate_members(5)
     random_seed = :rand.export_seed_s(:rand.seed(:exsplus))

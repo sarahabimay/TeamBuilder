@@ -1,7 +1,7 @@
 defmodule TeamBuilder.Messages do
   def welcome(), do: "Welcome to TeamBuilder. Please add your first invitee."
 
-  def add_members(), do: "Add Team Members"
+  def add_members(), do: "Add Team Member"
 
   def quit(), do: "[q] Quit"
 
