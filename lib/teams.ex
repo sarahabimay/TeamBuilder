@@ -9,7 +9,7 @@ defmodule TeamBuilder.Teams do
 
   def build_teams(team_type, all_members, random_seed) do
     {members, new_seed} = assign_team_numbers(team_type, all_members, random_seed)
-    teams = create_teams(team_type, members)
+    teams = create_teams(members)
     {teams, new_seed}
   end
 
@@ -18,21 +18,13 @@ defmodule TeamBuilder.Teams do
     |> team_allocator.assign_teams(option, random_seed)
   end
 
-  def create_teams(%{team_type: :max_size, team_allocator: _, options: _}, members) do
-    add_team_members([], :max_size, members)
-  end
+  def create_teams(members), do: add_team_members([], members)
 
-  def create_teams(%{team_type: :fixed, team_allocator: _, options: _} = team_type, members) do
-    team_type
-    |> empty_teams
-    |> add_team_members(members)
-  end
+  defp add_team_members(teams, []), do: teams
 
-  defp add_team_members(teams, :max_size, []), do: teams
-
-  defp add_team_members(teams, :max_size, [new_member | rest]) do
+  defp add_team_members(teams, [new_member | rest]) do
     amend_teams(teams, new_member)
-    |> add_team_members(:max_size, rest)
+    |> add_team_members(rest)
   end
 
   defp amend_teams(teams, %{member: _, team: team_number} = member) do
@@ -55,14 +47,6 @@ defmodule TeamBuilder.Teams do
 
   defp add_new_team(teams, team_number) do
     List.insert_at(teams, zero_indexed(team_number), team_skeleton(team_number))
-  end
-
-  defp add_team_members(teams, []), do: teams
-
-  defp add_team_members(teams, [new_member | rest]) do
-    teams
-    |> update_team(new_member)
-    |> add_team_members(rest)
   end
 
   defp update_team(teams, %{member: new_member, team: team_number}) do

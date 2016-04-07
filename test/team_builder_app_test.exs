@@ -48,19 +48,15 @@ defmodule TeamBuilderAppTest do
     team_type = "1 - 4"
     quit = "q"
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    expected_result = "[ Team 1 ]\n\n" <>
-                      "[ Team 2 ]\n\n" <>
-                      "[ Team 3 ]\n\n" <>
-                      "[ Team 4 ]\n\n" <>
-                      "Thank you for using TeamBuilder.\n"
+    expected_result = "Thank you for using TeamBuilder.\n"
     result = capture_io([input: "#{build}\n#{team_type}\n#{quit}\n", capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)
     assert String.contains?(result, expected_result)
   end
 
-  test "fixed number of teams chosen as the teams type" do
-    [a1, a2] = generate_members(2)
+  test "fixed number of teams chosen as the team type" do
+    [a1, a2] = TestHelper.generate_members(2)
     build_command = "b"
     team_type = "1 - 4"
     input = "#{a1}\n#{a2}\n#{build_command}\n#{team_type}\nq\n"
@@ -70,8 +66,6 @@ defmodule TeamBuilderAppTest do
                       "[1] #{first}\n\n" <>
                       "[ Team 2 ]\n" <>
                       "[1] #{second}\n\n" <>
-                      "[ Team 3 ]\n\n" <>
-                      "[ Team 4 ]\n\n" <>
                       "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
@@ -79,33 +73,23 @@ defmodule TeamBuilderAppTest do
     assert String.contains?(result, expected_result)
   end
 
-  test "max size teams chosen as the teams type" do
-    members = generate_members(3)
+  test "max size teams chosen as the team type" do
+    max_size = 3
+    members = TestHelper.generate_members(3)
     [a1, a2, a3] = members
     build_command = "b"
-    team_type = "2 - 2"
-    input = "#{a1}\n#{a2}\n#{a3}\n#{build_command}\n#{team_type}\nq\n"
+    max_size_team_type = "2 - #{max_size}"
+    input = "#{a1}\n#{a2}\n#{a3}\n#{build_command}\n#{max_size_team_type}\nq\n"
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
-    [first, second] = Enum.take_random(members, 2)
-    third = remaining_members([first, second], members)
+    [first, second, third] = Enum.take_random(members, max_size)
     expected_result = "[ Team 1 ]\n" <>
                       "[1] #{first}\n" <>
-                      "[2] #{second}\n\n" <>
-                      "[ Team 2 ]\n" <>
-                      "[1] #{third}\n\n" <>
+                      "[2] #{second}\n" <>
+                      "[3] #{third}\n\n" <>
                       "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)
     assert String.contains?(result, expected_result)
-  end
-
-  def generate_members(number) do
-    Enum.map(1..number, fn(num) -> "name#{num}" end)
-  end
-
-  def remaining_members(selected_members, all_members) do
-    {_, remaining} = Enum.partition(all_members, fn(x) -> Enum.any?(selected_members, fn(s) -> s == x end) end)
-    remaining
   end
 end
