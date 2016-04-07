@@ -6,8 +6,6 @@ defmodule TeamBuilderAppTest do
   alias TeamBuilder.TeamBuilderApp
   doctest TeamBuilder
 
-  @team_type %{:team_type => :fixed, :options => 4}
-
   defmodule FakeReader do
     def next_command() do
       "q"
@@ -33,7 +31,7 @@ defmodule TeamBuilderAppTest do
     quit = "q"
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
     expected_result =  "[ Members Added ]\n\n" <>
-                      "Thank you for using TeamBuilder.\n"
+                        "Thank you for using TeamBuilder.\n"
     result = capture_io([input: "#{empty_line}\n#{quit}\n", capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)
@@ -46,8 +44,8 @@ defmodule TeamBuilderAppTest do
   end
 
   test "fixed teams: typing b, builds the 4 empty teams" do
-    build_command="b"
-    team_type="1 - 4"
+    build = "b"
+    team_type = "1 - 4"
     quit = "q"
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
     expected_result = "[ Team 1 ]\n\n" <>
@@ -55,7 +53,7 @@ defmodule TeamBuilderAppTest do
                       "[ Team 3 ]\n\n" <>
                       "[ Team 4 ]\n\n" <>
                       "Thank you for using TeamBuilder.\n"
-    result = capture_io([input: "#{build_command}\n#{team_type}\n#{quit}\n", capture_prompt: false], fn() ->
+    result = capture_io([input: "#{build}\n#{team_type}\n#{quit}\n", capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)
     assert String.contains?(result, expected_result)
@@ -69,12 +67,12 @@ defmodule TeamBuilderAppTest do
     seed_state = :rand.export_seed_s(:rand.seed(:exsplus))
     [first, second] = Enum.take_random([a1, a2], 4)
     expected_result = "[ Team 1 ]\n" <>
-                       "[1] #{first}\n\n" <>
-                       "[ Team 2 ]\n" <>
-                       "[1] #{second}\n\n" <>
-                       "[ Team 3 ]\n\n" <>
-                       "[ Team 4 ]\n\n" <>
-                       "Thank you for using TeamBuilder.\n"
+                      "[1] #{first}\n\n" <>
+                      "[ Team 2 ]\n" <>
+                      "[1] #{second}\n\n" <>
+                      "[ Team 3 ]\n\n" <>
+                      "[ Team 4 ]\n\n" <>
+                      "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)
@@ -91,11 +89,11 @@ defmodule TeamBuilderAppTest do
     [first, second] = Enum.take_random(members, 2)
     third = remaining_members([first, second], members)
     expected_result = "[ Team 1 ]\n" <>
-                       "[1] #{first}\n" <>
-                       "[2] #{second}\n\n" <>
-                       "[ Team 2 ]\n" <>
-                       "[1] #{third}\n\n" <>
-                       "Thank you for using TeamBuilder.\n"
+                      "[1] #{first}\n" <>
+                      "[2] #{second}\n\n" <>
+                      "[ Team 2 ]\n" <>
+                      "[1] #{third}\n\n" <>
+                      "Thank you for using TeamBuilder.\n"
     result = capture_io([input: input, capture_prompt: false], fn() ->
       IO.write TeamBuilderApp.prompt_for_command([], ConsoleReader, ConsoleWriter, seed_state)
     end)

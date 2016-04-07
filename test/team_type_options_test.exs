@@ -2,11 +2,25 @@ defmodule TeamTypeOptionsTest do
   use ExUnit.Case
   doctest TeamBuilder
   alias TeamBuilder.TeamTypeOptions
+  alias TeamBuilder.FixedTeamAllocator
+  alias TeamBuilder.MaxSizeTeamAllocator
 
   test "two options for types of team allocation" do
     expected = [
-      %{ :menu_option => 1, :team_type => :fixed, :description =>  "Fixed Number Of Teams", :type_options => :max_number_of_teams },
-      %{ :menu_option => 2, :team_type => :max_size, :description => "Max Team Size", :type_options => :max_team_size }
+      %{
+        :menu_option => 1,
+        :team_type_allocator => FixedTeamAllocator,
+        :team_type => :fixed,
+        :description =>  "Fixed Number Of Teams",
+        :type_options => :max_number_of_teams
+      },
+      %{
+        :menu_option => 2,
+        :team_type => :max_size,
+        :team_type_allocator => MaxSizeTeamAllocator,
+        :description => "Max Team Size",
+        :type_options => :max_team_size
+      }
     ]
     assert TeamTypeOptions.options() == expected
   end
@@ -43,13 +57,22 @@ defmodule TeamTypeOptionsTest do
 
   test "choose option 1 with value 4" do
     choice = "1 - 4"
-    expected_type = %{:team_type => :fixed, :options => 4}
+    expected_type = %{
+      :team_type => :fixed,
+      :team_allocator => FixedTeamAllocator,
+      :options => 4
+    }
     assert TeamTypeOptions.get_team_type(choice) == expected_type
   end
 
   test "choose option 2 with value 8" do
     choice = "2 - 8"
-    expected_type = %{:team_type => :max_size, :options => 8}
+    expected_type = %{
+      :team_type => :max_size,
+      :team_allocator => MaxSizeTeamAllocator,
+      :options => 8
+    }
+    assert TeamTypeOptions.get_team_type(choice) == expected_type
     assert TeamTypeOptions.get_team_type(choice) == expected_type
   end
 

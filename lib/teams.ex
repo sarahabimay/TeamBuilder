@@ -1,6 +1,4 @@
 defmodule TeamBuilder.Teams do
-  alias TeamBuilder.RandomTeamAllocator
-
   def empty_teams(%{team_type: :fixed, options: fixed_count}) do
     Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
   end
@@ -9,36 +7,50 @@ defmodule TeamBuilder.Teams do
     Enum.map(1..1, fn(number) -> team_skeleton(number) end)
   end
 
-  def assign_team_numbers(all_members, team_type, random_seed) do
-    all_members
-    |> RandomTeamAllocator.assign_teams(team_type, random_seed)
+  def build_teams(team_type, all_members, random_seed) do
+    {members, new_seed} = assign_team_numbers(team_type, all_members, random_seed)
+    teams = create_teams(team_type, members)
+    {teams, new_seed}
   end
 
-  def create_teams(%{team_type: :max_size, options: _}, members) do
+  defp assign_team_numbers(%{team_type: _, team_allocator: team_allocator, options: option}, members, random_seed) do
+    members
+    |> team_allocator.assign_teams(option, random_seed)
+  end
+
+  def create_teams(%{team_type: :max_size, team_allocator: _, options: _}, members) do
     add_team_members([], :max_size, members)
   end
 
-  def create_teams(team_type, members) do
+  def create_teams(%{team_type: :fixed, team_allocator: _, options: _} = team_type, members) do
     team_type
     |> empty_teams
     |> add_team_members(members)
   end
 
-  def add_team_members(teams, :max_size, []), do: teams
+  defp add_team_members(teams, :max_size, []), do: teams
 
-  def add_team_members(teams, :max_size, [new_member | rest]) do
-    ammend_teams(teams, new_member)
+  defp add_team_members(teams, :max_size, [new_member | rest]) do
+    amend_teams(teams, new_member)
     |> add_team_members(:max_size, rest)
   end
 
-  def ammend_teams(teams, %{member: _, team: team_number} = member) do
-    new_teams =
-    if Enum.at(teams, zero_indexed(team_number), :none) == :none do
+  defp amend_teams(teams, %{member: _, team: team_number} = member) do
+    teams
+    |> create_new_team(team_number)
+    |> update_team(member)
+  end
+
+  defp create_new_team(teams, team_number) do
+    if not existing_team?(teams, team_number) do
       add_new_team(teams, team_number)
     else
       teams
     end
-    update_team(new_teams, member)
+  end
+
+  defp existing_team?(teams, team_number) do
+    Enum.at(teams, zero_indexed(team_number), :none) != :none
   end
 
   defp add_new_team(teams, team_number) do
