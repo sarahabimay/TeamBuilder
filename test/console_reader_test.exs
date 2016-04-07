@@ -9,7 +9,7 @@ defmodule ConsoleReaderTest do
     result = capture_io([input: member], fn ->
       IO.write ConsoleReader.next_command()
     end)
-    assert result == "Add Team Members ([q] Quit - [b] Build Teams): Sarah"
+    assert result == "Add Team Member ([q] Quit - [b] Build Teams): Sarah"
   end
 
   test "valid team type choice" do

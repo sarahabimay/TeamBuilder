@@ -1,12 +1,4 @@
 defmodule TeamBuilder.Teams do
-  def empty_teams(%{team_type: :fixed, options: fixed_count}) do
-    Enum.map(1..fixed_count, fn(number) -> team_skeleton(number) end)
-  end
-
-  def empty_teams(%{team_type: :max_size, options: _}) do
-    Enum.map(1..1, fn(number) -> team_skeleton(number) end)
-  end
-
   def build_teams(team_type, all_members, random_seed) do
     {members, new_seed} = assign_team_numbers(team_type, all_members, random_seed)
     teams = create_teams(members)

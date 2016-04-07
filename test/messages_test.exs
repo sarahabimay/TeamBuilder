@@ -9,7 +9,7 @@ defmodule MessagesTest do
   end
 
   test "add team member message" do
-    assert Messages.add_members() == "Add Team Members"
+    assert Messages.add_members() == "Add Team Member"
   end
 
   test "quit message" do
