@@ -55,7 +55,7 @@ defmodule TeamTypeOptionsTest do
     assert not TeamTypeOptions.valid_option?(invalid_choice)
   end
 
-  test "choose option 1 with value 4" do
+  test "choose fixed team type option" do
     choice = "1 - 4"
     expected_type = %{
       :team_type => :fixed,
@@ -65,7 +65,7 @@ defmodule TeamTypeOptionsTest do
     assert TeamTypeOptions.get_team_type(choice) == expected_type
   end
 
-  test "choose option 2 with value 8" do
+  test "choose max team size option" do
     choice = "2 - 8"
     expected_type = %{
       :team_type => :max_size,
