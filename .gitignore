@@ -8,3 +8,4 @@ erl_crash.dump
 *.swn
 *.beam
 team_builder
+/notes
