@@ -8,4 +8,19 @@ defmodule TestHelper do
   def remaining_members(selected_members, all_members) do
     all_members -- selected_members
   end
+
+  def get_teams(0) do
+    [
+      %{:team => 1, :names => []},
+    ]
+  end
+
+  def get_teams(4) do
+    [
+      %{:team => 1, :names => []},
+      %{:team => 2, :names => []},
+      %{:team => 3, :names => []},
+      %{:team => 4, :names => []},
+    ]
+  end
 end
