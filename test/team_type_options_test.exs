@@ -1,11 +1,10 @@
 defmodule TeamTypeOptionsTest do
   use ExUnit.Case
-  doctest TeamBuilder
   alias TeamBuilder.TeamTypeOptions
-  alias TeamBuilder.FixedTeam
+  alias TeamBuilder.Allocators.FixedTeam
   alias TeamBuilder.MaxSizeTeam
 
-  test "two options for types of team allocation" do
+  test "options for types of team allocation" do
     expected = [
       %{
         :menu_option => 1,

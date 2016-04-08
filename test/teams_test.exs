@@ -1,50 +1,49 @@
 defmodule TeamTest do
   use ExUnit.Case
-  doctest TeamBuilder
   alias TeamBuilder.Teams
-  alias TeamBuilder.FixedTeam
+  alias TeamBuilder.Allocators.FixedTeam
   alias TeamBuilder.MaxSizeTeam
 
-  @fixed_team_type %{:team_type => :fixed, :team_allocator => FixedTeam, :options => 4}
-  @max_size_team_type %{:team_type => :max_size, :team_allocator => MaxSizeTeam, :options => 4}
+  setup do
+    {
+      :ok,
+      fixed_team_type: %{:team_type => :fixed, :team_allocator => FixedTeam, :options => 4},
+      max_size_team_type: %{:team_type => :max_size, :team_allocator => MaxSizeTeam, :options => 4},
+      random_seed: :rand.export_seed_s(:rand.seed(:exsplus))
+    }
+  end
 
-  test "fixed_team_count:4 - assign 5 members to 4 teams" do
+  test "assign members to fixed number teams", context do
     members = TestHelper.generate_members(5)
-    random_seed = :rand.export_seed_s(:rand.seed(:exsplus))
     [a1, a2, a3, a4] = Enum.take_random(members, 4)
     [a5] = TestHelper.remaining_members([a1, a2, a3, a4], members)
     expected_teams = [
-      %{:team => 1, :names => [a1, a5] },
-      %{:team => 2, :names => [a2] },
-      %{:team => 3, :names => [a3] },
-      %{:team => 4, :names => [a4] }
+      %{:team => 1, :names => [a1, a5]},
+      %{:team => 2, :names => [a2]},
+      %{:team => 3, :names => [a3]},
+      %{:team => 4, :names => [a4]}
     ]
-    {teams, _} = Teams.build_teams(@fixed_team_type, members, random_seed)
+    {teams, _} = Teams.build_teams(context[:fixed_team_type], members, context[:random_seed])
     assert teams == expected_teams
   end
 
-  test "max_size_team:4 - assign 5 members to 2 teams" do
+  test "assign members to max sized teams", context do
     members = TestHelper.generate_members(5)
-    random_seed = :rand.export_seed_s(:rand.seed(:exsplus))
-    {teams, _} = Teams.build_teams(@max_size_team_type, members, random_seed)
-    {teams_two, _} = Teams.build_teams(@max_size_team_type, members, random_seed)
+    {teams, _} = Teams.build_teams(context[:max_size_team_type], members, context[:random_seed])
+    {teams_two, _} = Teams.build_teams(context[:max_size_team_type], members, context[:random_seed])
     assert teams == teams_two
   end
 
   test "fixed_team_count:4 one member generates one team" do
     [a1] = TestHelper.generate_members(1)
-    expected_teams = [
-      %{:team => 1, :names => [a1]},
-    ]
+    expected_teams = [ %{:team => 1, :names => [a1]}]
     teams =  Teams.create_teams([%{member: a1, team: 1}])
     assert teams == expected_teams
   end
 
   test "max_size_team:4 one member generates one team" do
     [a1] = TestHelper.generate_members(1)
-    expected_teams = [
-      %{:team => 1, :names => [a1]}
-    ]
+    expected_teams = [ %{:team => 1, :names => [a1]} ]
     teams =  Teams.create_teams([%{member: a1, team: 1}])
     assert teams == expected_teams
   end
@@ -57,11 +56,8 @@ defmodule TeamTest do
       %{member: a3, team: 1},
       %{member: a4, team: 1}
     ]
-    expected_teams = [
-      %{ :team => 1, :names => [a1, a2, a3, a4]}
-    ]
-    teams =  Teams.create_teams( members)
-    assert teams == expected_teams
+    expected_teams = [%{ :team => 1, :names => [a1, a2, a3, a4]}]
+    assert Teams.create_teams( members) == expected_teams
   end
 
   test "fixed_team_count:4, 4 members generates 4 Teams" do
@@ -73,12 +69,11 @@ defmodule TeamTest do
       %{member: a4, team: 4}
     ]
     expected_teams = [
-      %{:team => 1, :names => [a1] },
-      %{:team => 2, :names => [a2] },
-      %{:team => 3, :names => [a3] },
-      %{:team => 4, :names => [a4] }
+      %{:team => 1, :names => [a1]},
+      %{:team => 2, :names => [a2]},
+      %{:team => 3, :names => [a3]},
+      %{:team => 4, :names => [a4]}
     ]
-    teams =  Teams.create_teams(members)
-    assert teams == expected_teams
+    assert Teams.create_teams(members) == expected_teams
   end
 end

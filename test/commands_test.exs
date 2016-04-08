@@ -1,6 +1,5 @@
 defmodule CommandsTest do
   use ExUnit.Case
-  doctest TeamBuilder
   alias TeamBuilder.Commands
 
   test "'q' value is interpreted as 'quit'" do

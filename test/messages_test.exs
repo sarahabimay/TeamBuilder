@@ -1,6 +1,5 @@
 defmodule MessagesTest do
   use ExUnit.Case
-  doctest TeamBuilder
   alias TeamBuilder.Messages
 
   test "welcome message" do
