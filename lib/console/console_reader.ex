@@ -1,5 +1,4 @@
 defmodule TeamBuilder.ConsoleReader do
-  alias TeamBuilder.ConsoleWriter
   alias TeamBuilder.Messages
   alias TeamBuilder.TeamTypeOptions
 
@@ -48,7 +47,7 @@ defmodule TeamBuilder.ConsoleReader do
   end
 
   defp valid_choice(choice) do
-    if TeamTypeOptions.valid_option?(choice) do
+    if TeamTypeOptions.valid_options?(choice) do
       choice
     else
       team_type_options()

@@ -27,32 +27,32 @@ defmodule TeamTypeOptionsTest do
 
   test "lookup valid choice" do
     valid_choice = "1 - 4"
-    assert TeamTypeOptions.valid_option?(valid_choice)
+    assert TeamTypeOptions.valid_options?(valid_choice)
   end
 
   test "invalid if hyphen but missing invalid choice" do
     invalid_choice = "1 -"
-    assert not TeamTypeOptions.valid_option?(invalid_choice)
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "invalid if missing type_option choice" do
     invalid_choice = "1"
-    assert not TeamTypeOptions.valid_option?(invalid_choice)
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "invalid menu_option choice" do
     invalid_choice = "5 - 4"
-    assert not TeamTypeOptions.valid_option?(invalid_choice)
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "invalid because missing menu_option choice" do
     invalid_choice = "- 4"
-    assert not TeamTypeOptions.valid_option?(invalid_choice)
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "invalid type_option choice" do
     invalid_choice = "1 - a"
-    assert not TeamTypeOptions.valid_option?(invalid_choice)
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "choose fixed team type option" do

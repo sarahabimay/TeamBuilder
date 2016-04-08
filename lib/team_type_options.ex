@@ -24,25 +24,61 @@ defmodule TeamBuilder.TeamTypeOptions do
     @team_types
   end
 
-  def valid_option?(choice) do
+  def valid_options?(choice) do
     choice
     |> choices_as_integer_list
-    |> valid_choice?
-  end
-
-  def get_team_type([menu_option, type_option]) do
-    @team_types
-    |> Enum.filter(fn(type) -> type[:menu_option] == menu_option end)
-    |> create_team_type(type_option)
+    |> valid_choices?
   end
 
   def get_team_type(team_type_choice) do
     team_type_choice
     |> choices_as_integer_list
-    |> get_team_type
+    |> extract_team_type
   end
 
-  def choices_as_integer_list(choices) do
+  defp extract_team_type([menu_option, type_option]) do
+    menu_option
+    |> find_team_type
+    |> team_type_details(type_option)
+  end
+
+  defp find_team_type(menu_option) do
+    @team_types
+    |> Enum.filter(fn(type) -> type[:menu_option] == menu_option end)
+  end
+
+  defp team_type_details([], _), do: %{:team_type => nil}
+
+  defp team_type_details([chosen_option], type_option) do
+    %{
+      :team_type => chosen_option[:team_type],
+      :team_allocator => chosen_option[:team_type_allocator],
+      :options => type_option
+    }
+  end
+
+  defp valid_choices?([_]), do: false
+
+  defp valid_choices?([mo, to]) when mo == :error or to == :error, do: false
+
+  defp valid_choices?([menu_option, type_option]) do
+    valid?(menu_option, validate_menu_option) && valid?(type_option, validate_type_option)
+  end
+
+  defp valid?(value_to_validate, action) do
+    action.(value_to_validate)
+  end
+
+  defp validate_menu_option() do
+    fn(menu_option) ->
+      @team_types
+      |> Enum.any?(fn(option) -> option[:menu_option] == menu_option end)
+    end
+  end
+
+  defp validate_type_option(), do: fn(_) -> true end
+
+  defp choices_as_integer_list(choices) do
     choices
     |> parse_choice
     |> convert_to_integer
@@ -57,37 +93,6 @@ defmodule TeamBuilder.TeamTypeOptions do
   defp convert_to_integer(options) do
     options
     |> Enum.map(fn(option) -> option_to_integer(option) end)
-  end
-
-  defp valid_choice?([_]), do: false
-
-  defp valid_choice?([mo, to]) when mo == :error or to == :error, do: false
-
-  defp valid_choice?([menu_option, type_option]) do
-    valid?(menu_option, validate_menu_option) && valid?(type_option, validate_type_option)
-  end
-
-  defp valid?(value_to_validate, action) do
-    action.(value_to_validate)
-  end
-
-  defp validate_menu_option() do
-    fn(menu_option) ->
-    @team_types
-    |> Enum.any?(fn(option) -> option[:menu_option] == menu_option end)
-    end
-  end
-
-  defp validate_type_option(), do: fn(_) -> true end
-
-  defp create_team_type([], _), do: %{:team_type => nil}
-
-  defp create_team_type([chosen_option], type_option) do
-    %{
-      :team_type => chosen_option[:team_type],
-      :team_allocator => chosen_option[:team_type_allocator],
-      :options => type_option
-    }
   end
 
   defp option_to_integer(option) do
