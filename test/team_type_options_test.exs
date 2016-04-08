@@ -2,7 +2,7 @@ defmodule TeamTypeOptionsTest do
   use ExUnit.Case
   alias TeamBuilder.TeamTypeOptions
   alias TeamBuilder.Allocators.FixedTeam
-  alias TeamBuilder.MaxSizeTeam
+  alias TeamBuilder.Allocators.MaxSizeTeam
 
   test "options for types of team allocation" do
     expected = [

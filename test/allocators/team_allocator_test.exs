@@ -1,6 +1,6 @@
-defmodule TeamAllocatorTest do
+defmodule Allocators.TeamAllocatorTest do
   use ExUnit.Case
-  alias TeamBuilder.TeamAllocator
+  alias TeamBuilder.Allocators.TeamAllocator
 
   setup do
     {:ok, seed_state: :rand.export_seed_s(:rand.seed(:exsplus)) }

@@ -1,4 +1,4 @@
-defmodule TeamBuilder.TeamAllocator do
+defmodule TeamBuilder.Allocators.TeamAllocator do
   def members_selection(members, size, seed_state) do
     {selection, new_seed} = random_member_selection(members, size, seed_state)
     remainder = remaining_members(selection, members)
