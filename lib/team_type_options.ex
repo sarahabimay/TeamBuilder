@@ -1,6 +1,6 @@
 defmodule TeamBuilder.TeamTypeOptions do
   alias TeamBuilder.Messages
-  alias TeamBuilder.FixedTeam
+  alias TeamBuilder.Allocators.FixedTeam
   alias TeamBuilder.MaxSizeTeam
 
   @team_types [
