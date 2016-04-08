@@ -4,15 +4,41 @@
 
 Team Builder is an Elixir app, to randomly organize a list of people into teams.
 
+---
+
+## Installation
+1. First you must have Elixir installed
+  1. Mac OS
+    * Update your homebrew to latest: ```brew update```
+    * Run: ```brew install elixir```
+  2. If it's not in your PATH already, add Elixir (UNIX):
+    * ```export PATH="$PATH:/path/to/elixir/bin"```
+  3. Further help can be found at [Elixir-Lang](http://elixir-lang.org/install.html)
+
+
+2. Clone the repo
+  * ```git clone https://github.com/sarahabimay/TeamBuilder.git```
+
+
+3. From the repo directory, run the command:
+  * ```mix escript.build```
+
+
+4. Then from the directory run:
+  * ```./team_builder```
+
+---
+
 #### Usage:
-##### To Run:
+##### To Run the App:
 ```
-./team_builder
+$ mix escript.build
+$ ./team_builder
 ```
 ##### To Add Members:
 ```
 Welcome to TeamBuilder. Please add your first invitee.
-Add Team Member ([q] Quit - [b] Build Teams):
+Add Team Member ([q] Quit - [b] Build Teams): <new_member_name>
 ```
 ##### To Build Teams:
 ```
@@ -48,24 +74,17 @@ Add Team Members ([q] Quit - [b] Build Teams): b
 
 Add Team Members ([q] Quit - [b] Build Teams):
 ```
+---
 
-## Installation
-1. First you must have Elixir installed
-  1. Mac OS
-    * Update your homebrew to latest: ```brew update```
-    * Run: ```brew install elixir```
-  2. Add Elixir to your PATH (UNIX)
-    * ```export PATH="$PATH:/path/to/elixir/bin"```
-  3. Further help can be found at [Elixir-Lang](http://elixir-lang.org/install.html)
-
-
-2. Clone the repo
-  * ```git clone https://github.com/sarahabimay/TeamBuilder.git```
-
-
-3. From the repo directory, run the command:
-  * ```mix escript.build```
-
-
-4. Then from the directory run:
-  * ```./team_builder```
+##### To Run the Tests:
+```
+$mix test
+```
+###### or if you want to run a specific module's tests:
+```
+$mix test test/test_builder_app_test.exs
+```
+###### or a specific test:
+```
+$mix test test/test_builder_app_test.exs:<line>
+```
