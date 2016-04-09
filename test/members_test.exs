@@ -2,7 +2,7 @@ defmodule MembersTest do
   use ExUnit.Case
   alias TeamBuilder.Members
   alias TeamBuilder.Allocators.FixedTeam
-  alias TeamBuilder.MaxSizeTeam
+  alias TeamBuilder.Allocators.MaxSizeTeam
 
   setup do
     {:ok,

@@ -1,5 +1,5 @@
 defmodule TeamBuilder.Allocators.FixedTeam do
-  alias TeamBuilder.TeamAllocator
+  alias TeamBuilder.Allocators.TeamAllocator
 
   def assign_teams(members, team_count, seed_state) do
     _assign_teams(members, team_count, seed_state)

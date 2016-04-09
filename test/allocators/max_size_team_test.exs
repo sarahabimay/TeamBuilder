@@ -1,6 +1,6 @@
-defmodule MaxSizeTeamTest do
+defmodule Allocators.MaxSizeTeamTest do
   use ExUnit.Case
-  alias TeamBuilder.MaxSizeTeam
+  alias TeamBuilder.Allocators.MaxSizeTeam
 
   setup do
     {:ok, seed_state: :rand.export_seed_s(:rand.seed(:exsplus)) }

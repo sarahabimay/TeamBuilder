@@ -1,4 +1,4 @@
-defmodule FixedTeamTest do
+defmodule Allocators.FixedTeamTest do
   use ExUnit.Case
   alias TeamBuilder.Allocators.FixedTeam
 
