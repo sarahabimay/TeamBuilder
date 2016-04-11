@@ -22,7 +22,7 @@ defmodule Allocators.TeamAllocatorTest do
 
   test "map a member to a team" do
     expected = %{:member => "Sarah", :team => 1}
-    assert TeamAllocator.map_member_to_team("Sarah", zero_indexed(1)) == expected
+    assert TeamAllocator.associate_member_with_team("Sarah", zero_indexed(1)) == expected
   end
 
   test "separate team allocations from new random_seed" do

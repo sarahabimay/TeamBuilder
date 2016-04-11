@@ -34,33 +34,14 @@ defmodule TeamTest do
     assert teams == teams_two
   end
 
-  test "fixed_team_count:4 one member generates one team" do
+  test "one member generates one team" do
     [a1] = TestHelper.generate_members(1)
     expected_teams = [ %{:team => 1, :names => [a1]}]
-    teams =  Teams.create_teams([%{member: a1, team: 1}])
-    assert teams == expected_teams
+    teams =  Teams.create_teams({[%{member: a1, team: 1}], "seed"})
+    assert teams == {expected_teams, "seed"}
   end
 
-  test "max_size_team:4 one member generates one team" do
-    [a1] = TestHelper.generate_members(1)
-    expected_teams = [ %{:team => 1, :names => [a1]} ]
-    teams =  Teams.create_teams([%{member: a1, team: 1}])
-    assert teams == expected_teams
-  end
-
-  test "max_team_size:4, four members added to same team" do
-    [a1, a2, a3, a4] = TestHelper.generate_members(4)
-    members = [
-      %{member: a1, team: 1},
-      %{member: a2, team: 1},
-      %{member: a3, team: 1},
-      %{member: a4, team: 1}
-    ]
-    expected_teams = [%{ :team => 1, :names => [a1, a2, a3, a4]}]
-    assert Teams.create_teams( members) == expected_teams
-  end
-
-  test "fixed_team_count:4, 4 members generates 4 Teams" do
+  test "more than one member and team" do
     [a1, a2, a3, a4] = TestHelper.generate_members(4)
     members = [
       %{member: a1, team: 1},
@@ -74,6 +55,18 @@ defmodule TeamTest do
       %{:team => 3, :names => [a3]},
       %{:team => 4, :names => [a4]}
     ]
-    assert Teams.create_teams(members) == expected_teams
+    assert Teams.create_teams({members, "seed"}) == {expected_teams, "seed"}
+  end
+
+  test "all members added to same team" do
+    [a1, a2, a3, a4] = TestHelper.generate_members(4)
+    members = [
+      %{member: a1, team: 1},
+      %{member: a2, team: 1},
+      %{member: a3, team: 1},
+      %{member: a4, team: 1}
+    ]
+    expected_teams = [%{ :team => 1, :names => [a1, a2, a3, a4]}]
+    assert Teams.create_teams({members, "seed"}) == {expected_teams, "seed"}
   end
 end

@@ -20,6 +20,19 @@ defmodule Allocators.MaxSizeTeamTest do
     assert teams == expected_teams
   end
 
+  test "max member size is one", context do
+    max_size = 1
+    members = TestHelper.generate_members(2)
+    [a1] = Enum.take_random(members, max_size)
+    [a2] = TestHelper.remaining_members([a1], members)
+    expected_teams = [
+      %{ :member => a1, :team => 2 },
+      %{ :member => a2, :team => 1 },
+    ]
+    {teams, _ } = MaxSizeTeam.assign_teams(members, max_size, context[:seed_state])
+    assert teams == expected_teams
+  end
+
   test "members are a factor of the max number of members", context do
     max_size = 4
     members = TestHelper.generate_members(8)
@@ -35,7 +48,7 @@ defmodule Allocators.MaxSizeTeamTest do
     {teams, _ } = MaxSizeTeam.assign_teams(members, max_size, context[:seed_state])
     members_in_team1 = count_members(teams, 1)
     members_in_team2 = count_members(teams, 2)
-    assert [members_in_team1, members_in_team2] == [2, 3]
+    assert [members_in_team1, members_in_team2] == [3, 2]
   end
 
   def count_members(teams, team_number) do
