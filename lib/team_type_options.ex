@@ -48,7 +48,6 @@ defmodule TeamBuilder.TeamTypeOptions do
   end
 
   defp team_type_details([], _), do: %{:team_type => nil}
-
   defp team_type_details([chosen_option], type_option) do
     %{
       :team_type => chosen_option[:team_type],
@@ -58,9 +57,7 @@ defmodule TeamBuilder.TeamTypeOptions do
   end
 
   defp valid_choices?([_]), do: false
-
   defp valid_choices?([mo, to]) when mo == :error or to == :error, do: false
-
   defp valid_choices?([menu_option, type_option]) do
     valid?(menu_option, validate_menu_option) && valid?(type_option, validate_type_option)
   end
