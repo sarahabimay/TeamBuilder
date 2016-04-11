@@ -28,7 +28,7 @@ defmodule MessagesTest do
   end
 
   test "team allocation type option" do
-    assert Messages.team_type_options() == "[ Team Type Options ]"
+    assert Messages.team_type_options() == "Team Type Options:"
   end
 
   test "fixed number of teams option" do
