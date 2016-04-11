@@ -1,5 +1,6 @@
 defmodule TeamBuilder do
   alias TeamBuilder.Console
+  alias TeamBuilder.Members
   alias TeamBuilder.TeamBuilderApp
 
   def main(_) do

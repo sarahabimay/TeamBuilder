@@ -42,7 +42,7 @@ defmodule TeamBuilderAppTest do
 
   test "fixed number of teams chosen as the team type", context do
     [a1, a2] = TestHelper.generate_members(2)
-    team_type = "1 - 4"
+    team_type = "1 --4"
     input = "#{a1}\n#{a2}\nb\n#{team_type}\nq\n"
     [first, second] = Enum.take_random([a1, a2], 4)
     expected_result = "[ Team 1 ]\n" <>
@@ -57,7 +57,7 @@ defmodule TeamBuilderAppTest do
 
   test "max size teams chosen as the team type", context do
     [a1, a2, a3] = TestHelper.generate_members(3)
-    max_size_team_type = "2 - 4"
+    max_size_team_type = "2 --4"
     input = "#{a1}\n#{a2}\n#{a3}\nb\n#{max_size_team_type}\nq\n"
     [first, second, third] = Enum.take_random([a1, a2, a3], 3)
     expected_result = "[1] #{first}\n" <>

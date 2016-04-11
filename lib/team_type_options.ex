@@ -26,17 +26,17 @@ defmodule TeamBuilder.TeamTypeOptions do
 
   def valid_options?(choice) do
     choice
-    |> choices_as_integer_list
+    |> choices_as_integers
     |> valid_choices?
   end
 
   def get_team_type(team_type_choice) do
     team_type_choice
-    |> choices_as_integer_list
-    |> extract_team_type
+    |> choices_as_integers
+    |> format_team_type_details
   end
 
-  defp extract_team_type([menu_option, type_option]) do
+  defp format_team_type_details([menu_option, type_option]) do
     menu_option
     |> find_team_type
     |> team_type_details(type_option)
@@ -65,9 +65,7 @@ defmodule TeamBuilder.TeamTypeOptions do
     valid?(menu_option, validate_menu_option) && valid?(type_option, validate_type_option)
   end
 
-  defp valid?(value_to_validate, action) do
-    action.(value_to_validate)
-  end
+  defp valid?(value_to_validate, action), do: action.(value_to_validate)
 
   defp validate_menu_option() do
     fn(menu_option) ->
@@ -76,17 +74,24 @@ defmodule TeamBuilder.TeamTypeOptions do
     end
   end
 
-  defp validate_type_option(), do: fn(_) -> true end
+  defp validate_type_option(), do: fn(type_option) -> type_option > 0 end
 
-  defp choices_as_integer_list(choices) do
+  defp choices_as_integers(choices) do
     choices
     |> parse_choice
     |> convert_to_integer
   end
 
-  defp parse_choice(choice) do
-    choice
-    |> String.split("-")
+  defp parse_choice(choices) do
+    choices
+    |> extract_selection
+    |> remove_whitespace
+  end
+
+  defp extract_selection(choices), do: String.split(choices, "--")
+
+  defp remove_whitespace(selections) do
+    selections
     |> Enum.map(fn(detail) -> String.strip(detail) end)
   end
 

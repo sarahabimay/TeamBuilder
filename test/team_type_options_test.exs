@@ -25,12 +25,47 @@ defmodule TeamTypeOptionsTest do
   end
 
   test "lookup valid choice" do
-    valid_choice = "1 - 4"
+    valid_choice = "1 --4"
     assert TeamTypeOptions.valid_options?(valid_choice)
   end
 
+  test "invalid menu_option choice" do
+    invalid_choice = "5 -- 4"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid if menu option is zero" do
+    invalid_choice = "0 -- -2"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid if negative type" do
+    invalid_choice = "-1 -- 2"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid type_option choice is not a number" do
+    invalid_choice = "1 -- a"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid if type option is zero" do
+    invalid_choice = "1 -- 0"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid if negative type option" do
+    invalid_choice = "1 -- -2"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
+  test "invalid if a single hyphen" do
+    invalid_choice = "1 - 2"
+    assert not TeamTypeOptions.valid_options?(invalid_choice)
+  end
+
   test "invalid if hyphen but missing invalid choice" do
-    invalid_choice = "1 -"
+    invalid_choice = "1 --"
     assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
@@ -39,23 +74,13 @@ defmodule TeamTypeOptionsTest do
     assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
-  test "invalid menu_option choice" do
-    invalid_choice = "5 - 4"
-    assert not TeamTypeOptions.valid_options?(invalid_choice)
-  end
-
   test "invalid because missing menu_option choice" do
-    invalid_choice = "- 4"
-    assert not TeamTypeOptions.valid_options?(invalid_choice)
-  end
-
-  test "invalid type_option choice" do
-    invalid_choice = "1 - a"
+    invalid_choice = "-- 4"
     assert not TeamTypeOptions.valid_options?(invalid_choice)
   end
 
   test "choose fixed team type option" do
-    choice = "1 - 4"
+    choice = "1 -- 4"
     expected_type = %{
       :team_type => :fixed,
       :team_allocator => FixedTeam,
@@ -65,7 +90,7 @@ defmodule TeamTypeOptionsTest do
   end
 
   test "choose max team size option" do
-    choice = "2 - 8"
+    choice = "2 -- 8"
     expected_type = %{
       :team_type => :max_size,
       :team_allocator => MaxSizeTeam,
@@ -76,7 +101,7 @@ defmodule TeamTypeOptionsTest do
   end
 
   test "invalid option returns nil" do
-    choice = "4 - 8"
+    choice = "4 -- 8"
     expected_type = %{:team_type => nil}
     assert TeamTypeOptions.get_team_type(choice) == expected_type
   end
