@@ -7,7 +7,6 @@ defmodule TeamBuilder.Allocators.FixedTeam do
   end
 
   defp _assign_teams([], _, seed_state), do: [%{:new_seed => seed_state}]
-
   defp _assign_teams(members, team_count, seed_state) do
     {selection, remainder, new_seed} = TeamAllocator.members_selection(members, team_count, seed_state)
     with_team_number(selection) ++ _assign_teams(remainder, team_count, new_seed)

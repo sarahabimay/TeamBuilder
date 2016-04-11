@@ -5,15 +5,14 @@ defmodule TeamBuilder.Teams do
     {teams, new_seed}
   end
 
-  defp assign_team_numbers(%{team_type: _, team_allocator: team_allocator, options: option}, members, random_seed) do
+  defp assign_team_numbers(%{team_type: _, team_allocator: allocator, options: option}, members, random_seed) do
     members
-    |> team_allocator.assign_teams(option, random_seed)
+    |> allocator.assign_teams(option, random_seed)
   end
 
   def create_teams(members), do: add_team_members([], members)
 
   defp add_team_members(teams, []), do: teams
-
   defp add_team_members(teams, [new_member | rest]) do
     amend_teams(teams, new_member)
     |> add_team_members(rest)
@@ -26,11 +25,7 @@ defmodule TeamBuilder.Teams do
   end
 
   defp create_new_team(teams, team_number) do
-    if not existing_team?(teams, team_number) do
-      add_new_team(teams, team_number)
-    else
-      teams
-    end
+    if not existing_team?(teams, team_number), do: add_new_team(teams, team_number), else: teams
   end
 
   defp existing_team?(teams, team_number) do
