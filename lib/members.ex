@@ -1,6 +1,8 @@
 defmodule TeamBuilder.Members do
   alias TeamBuilder.Teams
 
+  def members(), do: []
+
   def add_to_members(members, ""), do: members
 
   def add_to_members(members, new_member) do
