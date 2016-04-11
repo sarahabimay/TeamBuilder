@@ -19,12 +19,10 @@ defmodule TeamBuilder.Allocators.MaxSizeTeam do
   end
 
   defp number_of_members_to_select([_| []], _), do: 1
-
   defp number_of_members_to_select(members, max_size) do
     div(Enum.count(members), calculate_number_of_teams(members, 0, max_size)) end
 
   defp calculate_number_of_teams([], team_count, _), do: team_count
-
   defp calculate_number_of_teams(members, team_count, max_size) do
     members
     |> remaining_members(max_size)

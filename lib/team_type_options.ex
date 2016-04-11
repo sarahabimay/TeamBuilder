@@ -20,9 +20,7 @@ defmodule TeamBuilder.TeamTypeOptions do
     }
   ]
 
-  def options() do
-    @team_types
-  end
+  def options, do: @team_types
 
   def valid_options?(choice) do
     choice
@@ -64,14 +62,14 @@ defmodule TeamBuilder.TeamTypeOptions do
 
   defp valid?(value_to_validate, action), do: action.(value_to_validate)
 
-  defp validate_menu_option() do
+  defp validate_menu_option do
     fn(menu_option) ->
       @team_types
       |> Enum.any?(fn(option) -> option[:menu_option] == menu_option end)
     end
   end
 
-  defp validate_type_option(), do: fn(type_option) -> type_option > 0 end
+  defp validate_type_option, do: fn(type_option) -> type_option > 0 end
 
   defp choices_as_integers(choices) do
     choices

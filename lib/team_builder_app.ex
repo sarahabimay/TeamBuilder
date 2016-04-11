@@ -4,7 +4,7 @@ defmodule TeamBuilder.TeamBuilderApp do
   alias TeamBuilder.Commands
 
   def start_application(members, display, seed_state) do
-    display.welcome_message()
+    display.welcome_message
     prompt_for_command(members, display, seed_state)
   end
 
@@ -14,17 +14,17 @@ defmodule TeamBuilder.TeamBuilderApp do
     |> process_command(members, display, seed_state)
   end
 
-  defp process_command(:quit, _, display, _), do: display.goodbye_message()
+  defp process_command(:quit, _, display, _), do: display.goodbye_message
 
   defp process_command(:build_teams, members, display, seed_state) do
-    display.clear_screen()
+    display.clear_screen
     {teams, next_seed_state} = build_teams(members, display, seed_state)
     display.display_teams(teams)
     prompt_for_command(members, display, next_seed_state)
   end
 
   defp process_command({:add_member, new_member}, members, display, seed_state) do
-    display.clear_screen()
+    display.clear_screen
     all_members = Members.add_to_members(members, new_member)
     display.display_members(all_members)
     prompt_for_command(all_members, display, seed_state)
@@ -36,7 +36,7 @@ defmodule TeamBuilder.TeamBuilderApp do
   end
 
   defp get_team_type(display) do
-    display.team_type_options()
+    display.team_type_options
     |> TeamTypeOptions.get_team_type
   end
 

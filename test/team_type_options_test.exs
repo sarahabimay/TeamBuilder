@@ -21,7 +21,7 @@ defmodule TeamTypeOptionsTest do
         :type_options => :max_team_size
       }
     ]
-    assert TeamTypeOptions.options() == expected
+    assert TeamTypeOptions.options == expected
   end
 
   test "lookup valid choice" do
