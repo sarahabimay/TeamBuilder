@@ -2,25 +2,28 @@ defmodule TeamBuilder.Allocators.MaxSizeTeam do
   alias TeamBuilder.Allocators.TeamAllocator
 
   def assign_teams(members, max_size, seed_state) do
-    team_number = 0
     members
     |> calculate_number_of_teams(0, max_size)
-    |> _assign_teams(members, max_size, team_number, seed_state)
+    |> _assign_teams(members, max_size, seed_state)
     |> TeamAllocator.separate_teams_and_seed
   end
 
-  defp _assign_teams(0, _, _, _, seed_state), do: [%{:new_seed => seed_state}]
-  defp _assign_teams(number_of_teams, members, max_size, team_number, seed_state) do
-    number_of_members_to_select = number_of_members_to_select(members, max_size)
-    {selection, remainder, new_seed} =
-    TeamAllocator.members_selection(members, number_of_members_to_select, seed_state)
-    with_team_number([selection], team_number) ++
-    _assign_teams(number_of_teams - 1, remainder, max_size, team_number + 1, new_seed)
+  defp _assign_teams(0, _, _, seed_state), do: [%{:new_seed => seed_state}]
+  defp _assign_teams(team_count, members, max_size, seed_state) do
+    {selection, remainder, new_seed} = select_members(members, max_size, seed_state)
+    assign_team_number(selection, team_count - 1 ) ++
+    _assign_teams(team_count - 1, remainder, max_size, new_seed)
+  end
+
+  defp select_members(members, max_size, seed_state) do
+    number_of_members = number_of_members_to_select(members, max_size)
+    TeamAllocator.members_selection(members, number_of_members, seed_state)
   end
 
   defp number_of_members_to_select([_| []], _), do: 1
   defp number_of_members_to_select(members, max_size) do
-    div(Enum.count(members), calculate_number_of_teams(members, 0, max_size)) end
+    div(Enum.count(members), calculate_number_of_teams(members, 0, max_size))
+  end
 
   defp calculate_number_of_teams([], team_count, _), do: team_count
   defp calculate_number_of_teams(members, team_count, max_size) do
@@ -29,10 +32,9 @@ defmodule TeamBuilder.Allocators.MaxSizeTeam do
     |> calculate_number_of_teams(team_count + 1, max_size)
   end
 
-  defp with_team_number(team, team_number) do
-    team
-    |> Enum.map(fn(members) -> Enum.map(members, fn(member) -> TeamAllocator.map_member_to_team(member, team_number) end) end)
-    |> List.flatten
+  defp assign_team_number(team_members, team_number) do
+    team_members
+    |> Enum.map(fn(member) -> TeamAllocator.associate_member_with_team(member, team_number) end)
   end
 
   defp remaining_members(members, max_size) do

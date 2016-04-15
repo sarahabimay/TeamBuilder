@@ -5,8 +5,8 @@ defmodule TeamBuilder.Allocators.TeamAllocator do
     {selection, remainder, new_seed}
   end
 
-  def map_member_to_team(member, index) do
-    %{ :member => member, :team => one_indexed(index) }
+  def associate_member_with_team(member, team_number_zero_index) do
+    %{:member => member, :team => one_indexed(team_number_zero_index)}
   end
 
   def separate_teams_and_seed(teams_and_seed) do
